@@ -16,11 +16,10 @@ Creating a new release
 Requirements:
 
 - autoconf
-- githubrelease (pypi)
+- gh
 - gpg
 
 Publishing a release
 --------------------
 
 - Use github to promote from draft or use the command output from `make-and-stage-release`
-- Send announcement on mailing lists
