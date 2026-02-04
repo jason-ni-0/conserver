@@ -38,6 +38,9 @@ dotest()
 		rm -f test$testnum.diff
 	    else
 		echo "failed (diffs in test$testnum.diff)"
+		echo === diff ===
+		cat test$testnum.diff
+		echo ============
 		exitval=1
 	    fi
 	else
