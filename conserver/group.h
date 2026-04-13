@@ -84,5 +84,6 @@ extern void SendIWaitClientsMsg(CONSENT *, char *);
 extern int AttemptSSL(CONSCLIENT *);
 #endif
 #if HAVE_GSSAPI
+#define MAX_GSSAPI_TOKSIZE 64*1024
 extern int AttemptGSSAPI(CONSCLIENT *);
 #endif

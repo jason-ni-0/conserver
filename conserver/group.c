@@ -3128,7 +3128,6 @@ DoClientRead(GRPENT *pGE, CONSCLIENT *pCLServing)
 		    }
 #endif
 #if HAVE_GSSAPI
-#define MAX_GSSAPI_TOKSIZE 64*1024
 		} else if (pCLServing->iState == S_IDENT &&
 			   strcmp(pcCmd, "gssapi") == 0) {
 		    if (pcArgs == (char *)0) {

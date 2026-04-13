@@ -475,10 +475,27 @@ DoNormalRead(CONSCLIENT *pCLServing)
 #if HAVE_GSSAPI
 	    } else if (pCLServing->iState == S_IDENT &&
 		       strcmp(pcCmd, "gssapi") == 0) {
-		FileWrite(pCLServing->fd, FLAGFALSE, "ok\r\n", -1);
-		/* Change the I/O mode right away, we'll do the read
-		 * and accept when the select gets back to us */
-		pCLServing->ioState = INGSSACCEPT;
+		if (pcArgs == (char *)0) {
+		    FileWrite(pCLServing->fd, FLAGFALSE,
+			      "gssapi requires argument\r\n", -1);
+		} else {
+		    FileWrite(pCLServing->fd, FLAGFALSE, "ok\r\n", -1);
+		    /* Read the token size but limit it to 64K,
+		     * that's practical limit for GSSAPI krb5 mechanism.
+		     *
+		     * The client connection will be rejected for large
+		     * requests as server will not be able to parse
+		     * incomplete ASN.1 but this is intentional. */
+		    pCLServing->tokenSize = (size_t) strtol(pcArgs, NULL, 10);
+		    if (pCLServing->tokenSize > MAX_GSSAPI_TOKSIZE) {
+			FileWrite(pCLServing->fd, FLAGFALSE,
+				  "gssapi token size too large\r\n", -1);
+			pCLServing->tokenSize = MAX_GSSAPI_TOKSIZE;
+		    }
+		    /* Change the I/O mode right away, we'll do the read
+		     * and accept when the select gets back to us */
+		    pCLServing->ioState = INGSSACCEPT;
+		}
 #endif
 	    } else if (pCLServing->iState == S_IDENT &&
 		       strcmp(pcCmd, "login") == 0) {
